@@ -24,6 +24,13 @@ void 25Tree::insert(string word) {
 }
 
 void 25Tree::insert(struct Node*& node, string word) {
+  if (node == NULL) {
+    node = new Node();
+    node->data1 = word;
+    root = node;
+    return;
+  }
+
   if (isLeaf(node) && !isFiveNode(node)) {
     nodeInsert(node, word);
     return;
@@ -47,8 +54,12 @@ void 25Tree::insert(struct Node*& node, string word) {
       newRoot->data1 = tempData;
       newRoot->child1 = newLeft;
       newRoot->child2 = newRight;
+      newRoot->child1->parent = newRoot;
+      newRoot->child2->parent = newRoot;
+      newRoot->child3->parent = newRoot;
+      newRoot->child4->parent = newRoot;
+      newRoot->child5->parent = newRoot;
       root = newRoot;
-      node->parent = 
     }
     else {
       insert(node->parent, tempData);
