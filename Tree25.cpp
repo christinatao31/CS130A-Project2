@@ -1,11 +1,11 @@
-#include "25Tree.h"
+#include "Tree25.h"
 
 #include <string>
 
 using namespace std;
 
 // constructor
-Tree25::2ree25() {
+Tree25::Tree25() {
   root = NULL;
   height = 0;
 }
@@ -15,7 +15,7 @@ Tree25::~Tree25() {
 
 }
 
-bool 25Tree25::search(string word) {
+bool Tree25::search(string word) {
   return false;
 }
 
@@ -23,7 +23,7 @@ void Tree25::insert(string word) {
   insert(root, word);
 }
 
-void 25Tree::insert(struct Node*& node, string word) {
+void Tree25::insert(struct Node*& node, string word) {
   if (node == NULL) {
     node = new Node();
     node->data1 = word;
@@ -42,7 +42,7 @@ void 25Tree::insert(struct Node*& node, string word) {
     newLeft->data1 = node->data1;
     newLeft->child1 = node->child1;
     newLeft->child2 = node->child2;
-    struct Node* newright = new Node();
+    struct Node* newRight = new Node();
     newRight->data1 = node->data3;
     newRight->data2 = node->data4;
     newRight->child1 = node->child3;
@@ -68,7 +68,7 @@ void 25Tree::insert(struct Node*& node, string word) {
 	node->parent->child2 = newRight;
       }
       else {
-	if (node->parent->data4.equals("")) {
+	if (node->parent->data4 == "") {
 	  node->parent->child3 = newLeft;
 	  node->parent->child4 = newRight;
 	}
@@ -95,24 +95,24 @@ void 25Tree::insert(struct Node*& node, string word) {
   
 }
 
-void 25Tree::remove(string word) {
+void Tree25::remove(string word) {
 
 }
 
-void 25Tree::sort() {
+void Tree25::sort() {
 
 }
 
-void 25Tree::rangeSearch(string startWord, string endWord) {
+void Tree25::rangeSearch(string startWord, string endWord) {
 
 }
 
-void 25Tree::initNode(struct Node*& node) {
+void Tree25::initNode(struct Node*& node) {
   node->data1 = node->data2 = node->data3 = node->data4 = "";
   node->child1 = node->child2 = node->child3 = node->child4 = node->child5 = NULL;
 }
 
-bool 25Tree::isFiveNode(struct Node* node) {
+bool Tree25::isFiveNode(struct Node* node) {
   if (node->data1 != "" && node->data2 != "" &&
       node->data3 != "" && node->data4 != "")
     return true;
@@ -120,7 +120,7 @@ bool 25Tree::isFiveNode(struct Node* node) {
   return false;
 }
  
-bool 25Tree::nodeIsEmpty(struct Node* node) {
+bool Tree25::nodeIsEmpty(struct Node* node) {
   if (node->data1 == "" && node->data2 == "" &&
       node->data3 == "" && node->data4 == "")
     return true;
@@ -128,7 +128,7 @@ bool 25Tree::nodeIsEmpty(struct Node* node) {
   return false;
 }
 
-bool 25Tree::isLeaf(struct Node* node) {
+bool Tree25::isLeaf(struct Node* node) {
   if (node->child1 == NULL && node->child2 == NULL && node->child3 == NULL &&
       node->child4 == NULL && node->child5 == NULL)
     return true;
@@ -136,7 +136,7 @@ bool 25Tree::isLeaf(struct Node* node) {
   return false;
 }
 
-void 25Tree::nodeInsert(struct Node* node, string word) {
+void Tree25::nodeInsert(struct Node* node, string word) {
   if(word.compare(node->data1) < 0) {
     node->data4 = node->data3;
     node->data3 = node->data2;
