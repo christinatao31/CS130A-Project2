@@ -1,0 +1,44 @@
+#ifndef 25tree_h
+#define 25tree_h
+
+struct Node {
+  string data1, data2, data3, data4;
+  Node *child1, *child2, *child3, *child4, *child5, *parent;
+
+  Node(string data) {
+    data1 = data;
+    child1 = child2 = child3 = child4 = child5 = NULL;
+  }
+
+  Node(string data1, data2) {
+    data1 = data1;
+  }
+  
+};
+
+class 25Tree {
+
+ public:
+  // constructor
+  25Tree();
+
+  // destructor
+  ~25Tree();
+
+  bool search(string word);
+  void insert(string word);
+  void remove(string word);
+  void sort();
+  void rangeSearch(string startWord, string endWord);  
+  
+ private:
+  Node* root;
+  int height;
+  void initNode(struct Node*& node);
+  void insert(struct Node*& node, string word);
+  bool isFiveNode(struct Node* node);
+  bool nodeIsEmpty(structNode* node);
+  
+};
+
+#endif 25tree_h
