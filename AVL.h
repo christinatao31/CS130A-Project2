@@ -4,19 +4,16 @@
 
 using namespace std;
 
-struct Node{
-	Node *left, *right;
-	string word;
-	int wordCount;
-	int height;
+struct AvlNode {
+  Comparable element;
+  AvlNode *left;
+  AvlNode *right;
+  int height;
+  AvlNode(const Comparable & ele, AvlNode *lt, AvlNode *rt, int h = 0)
+    : element{ele}, left{lt}, right{rt}, heigh{h} { }
+  AvlNode(Comparable && ele, AvlNode *lt, AvlNode *rt, int h = 0)
+    : element{std:move(ele)}, left{lt}, right{rt}, height{h} { }
 
-	Node(string word) {
-		left = NULL;
-		right = NULL;
-		this->word = word;
-		wordCount = 1;
-		height = 0;
-	}
 };
 
 class AVL {
@@ -26,9 +23,15 @@ public:
 	~AVL();
   	void printInorder();
   	bool search(string word);  //search function
-  	void insert(string word);	//insert function
+  	int height(AvlNode *t);
+    void insert(const Comparable & x, AvlNode * & t);
+    void balance(AvlNode * & t);
+    void rotateWithLeftChild(AvlNode * & k2);
+    void doubleWithLeftChild(AvlNode * & k3);
+    void rotateWithRightChild(AvlNode * & k2);
+    void doubleWithRightChild(AvlNode * & k3);
+    void remove(const Comparable & x, AvlNode *& t) 
   	Node* getRoot();
-  	void deleteWord(string word);	//delete function
   	void sort(); 				//sort function
   	void rangeSearch(string startWord, string endWord); //rangeSearch function 
   	int countWords();
@@ -36,18 +39,11 @@ public:
 
 private:
   	Node* root;
-  	void printInorder(Node* node);
-  	bool search(Node* node, string word);
-  	int height(Node* node);
-  	int getDiff(Node* node);
-  	void leftRotate(Node*& node);
-  	void rightRotate(Node*& node);
-  	void insert(Node*& node, string word);
-  	void deleteWord(Node*& node, string word);
-  	void sort(Node* node, ofstream& outFile);
-  	void rangeSearch(Node* node, string startWord, string endWord);
-  	int countWords(Node* node);
-  	void destroyTree(Node* node);
+  	void printInorder(AvlNode* node);
+  	void sort(AvlNode* node, ofstream& outFile);
+  	void rangeSearch(AvlNode* node, string startWord, string endWord);
+  	int countWords(AvlNode* node);
+  	void destroyTree(AvlNode* node);
 
 };
 
