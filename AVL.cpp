@@ -7,16 +7,12 @@
 using namespace std;
 
 AVL::AVL() {
-	root = NULL;
 }
 
 AVL::~AVL() {
 	destroyTree();
 }
 
-void AVL::printInorder() {
-	printInorder(root);
-}
 void AVL::printInorder(AvlNode* node) {
 	if(node == NULL) return;
 	printInorder(node->left);
@@ -24,9 +20,6 @@ void AVL::printInorder(AvlNode* node) {
 	printInorder(node->right);
 }
 
-bool AVL::search(string word) {
-	search(root, word);
-}
 
 bool AVL::search(AvlNode* node, string word) {
 	if(node == NULL) {
@@ -58,9 +51,9 @@ int AVL::height(AvlNode *t) const {
 void AVL::insert(const string & x, AvlNode * & t) {
 	if (t == nullptr)
 		t = new AvlNode(x, nullptr, nullptr);
-	else if (x < t->element)
+	else if (x < t->word)
 		insert(x, t->left);
-	else if (t->element < x)
+	else if (t->word < x)
 		insert(x, t->right);
 	balance(t);
 }
@@ -73,7 +66,7 @@ void AVL::balance(AvlNode * & t) {
 		if (height(t->left->left) >= height(t->left->right))
 			rotateWithLeftChild(t);
 		else
-			doubleWithLeftChild(t)
+			doubleWithLeftChild(t);
 	else if (height(t->right) – height(t->left) > ALLOWED_IMBALANCE)
 		if (height(t->right->right) >= height(t->right->left))
 			rotateWithRightChild(t);
@@ -92,7 +85,7 @@ void AVL::rotateWithLeftChild(AvlNode * & k2) {
 	k2->left = k1->right;
 	k1->right = k2;
 	k2->height = max(height(k2->left), height(k2->right)) + 1;
-	k1->height = max(height(k1->left, k2->height)) + 1;
+	k1->height = max(height(k1->left), k2->height) + 1;
 	k2 = k1;
 }
 /**
@@ -115,7 +108,7 @@ void AVL::rotateWithRightChild(AvlNode * & k2) {
 	k2->right = k1->left;
 	k1->left = k2;
 	k2->height = max(height(k2->left), height(k2->right)) + 1;
-	k1->height = max(height(k1->left, k2->height)) + 1;
+	k1->height = max(height(k1->left), k2->height) + 1;
 	k2 = k1;
 }
 /**
@@ -138,13 +131,13 @@ void AVL::doubleWithRightChild(AvlNode * & k3) {
 void AVL::remove(const string & x, AvlNode *& t) {
 	if (t == nullptr)
 		return; // item not found; do nothing
-	if (x < t->element)
+	if (x < t->word)
 		remove(x, t->left);
-	else if (t->element < x)
+	else if (t->word < x)
 		remove(x, t->right);
 	else if (t->left != nullptr && t->right != nullptr) { // two children
-		t->element = findMin(t->right)->element;
-		remove(t->element, t->right);
+		t->word = findMin(t->right)->word;
+		remove(t->word, t->right);
 	}
 	else {
 		AvlNode *oldNode = t;
@@ -155,26 +148,18 @@ void AVL::remove(const string & x, AvlNode *& t) {
 }
 
 
-
-void AVL::sort() {
-  ofstream outFile;
-  outFile.open("output.txt");
-  sort(root, outFile);
-  outFile << endl;
-  outFile.close();
-}
-
 void AVL::sort(AvlNode* node, ofstream& outFile) {
-  if (node == NULL)
-    return;
-  sort(node->left, outFile);
-  outFile << node->word << endl;
-  sort(node->right, outFile);
+	ofstream outFile;
+ 	outFile.open("output.txt");
+ 	if (node == NULL)
+ 		return;
+ 	sort(node->left, outFile);
+	outFile << node->word << endl;
+ 	sort(node->right, outFile);
+ 	outFile << endl;
+  	outFile.close();
 }
 
-void AVL::rangeSearch(string startWord, string endWord) {
-  rangeSearch(root, startWord, endWord);
-}
 
 void AVL::rangeSearch(AvlNode* node, string startWord, string endWord) {
   if (node == NULL)
