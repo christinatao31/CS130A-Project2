@@ -60,19 +60,22 @@ void AVL::insert(const string & x, AvlNode * & t) {
 static const int ALLOWED_IMBALANCE = 1;
 // Assume t is balanced or within one of being balanced
 void AVL::balance(AvlNode * & t) {
-	if (t == nullptr)
+	if (t == nullptr) {
 		return;
-	if (height(t->left) - height(t->right) > ALLOWED_IMBALANCE)
-		if (height(t->left->left) >= height(t->left->right))
+	}
+	if (height(t->left) - height(t->right) > ALLOWED_IMBALANCE){
+		if (height(t->left->left) >= height(t->left->right)) {
 			rotateWithLeftChild(t);
-		else
+		} else {
 			doubleWithLeftChild(t);
-	else if (height(t->right) - height(t->left) > ALLOWED_IMBALANCE)
-		if (height(t->right->right) >= height(t->right->left))
+		}
+	}else if (height(t->right) - height(t->left) > ALLOWED_IMBALANCE) {
+		if (height(t->right->right) >= height(t->right->left)) {
 			rotateWithRightChild(t);
-		else
+		} else {
 			doubleWithRightChild(t);
-
+		}
+	}
 	t->height = max(height(t->left), height(t->right)) + 1;
 }
 /**
@@ -136,9 +139,9 @@ void AVL::remove(const string & x, AvlNode *& t) {
 	else if (t->word < x)
 		remove(x, t->right);
 	else if (t->left != nullptr && t->right != nullptr) { // two children
-		AvlNode* temp = AvlNode;
-		while(temp->right != NULL) temp = temp->right;
-		t->word = temp;
+		AvlNode* temp = t;
+		while(temp->right != nullptr) temp = temp->right;
+		t->word = temp->word;
 		remove(t->word, t->right);
 	}
 	else {
