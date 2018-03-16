@@ -21,15 +21,18 @@ class AVL {
 public:
 	AVL();
 	~AVL();
-  	void printInorder();
+    void printInorder(AvlNode* node);
+
   	bool search(AvlNode* node, string word);  //search function
-  	int height(AvlNode *t) const ;
+  	
+    int height(AvlNode *t) const ;
     void insert(const string & x, AvlNode * & t);
     void balance(AvlNode * & t);
     void rotateWithLeftChild(AvlNode * & k2);
     void doubleWithLeftChild(AvlNode * & k3);
     void rotateWithRightChild(AvlNode * & k2);
     void doubleWithRightChild(AvlNode * & k3);
+    
     void remove(const string & x, AvlNode *& t);
   	//Node* getRoot();
   	void sort(AvlNode* node, ofstream& outFile); 				//sort function
@@ -39,7 +42,6 @@ public:
 
 private:
   	AvlNode* root;
-  	void printInorder(AvlNode* node);
   	int countWords(AvlNode* node);
   	void destroyTree(AvlNode* node);
 
