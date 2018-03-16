@@ -5,13 +5,13 @@
 using namespace std;
 
 struct AvlNode {
-  Comparable element;
+  string element;
   AvlNode *left;
   AvlNode *right;
   int height;
-  AvlNode(const Comparable & ele, AvlNode *lt, AvlNode *rt, int h = 0)
+  AvlNode(const string & ele, AvlNode *lt, AvlNode *rt, int h = 0)
     : element{ele}, left{lt}, right{rt}, heigh{h} { }
-  AvlNode(Comparable && ele, AvlNode *lt, AvlNode *rt, int h = 0)
+  AvlNode(string && ele, AvlNode *lt, AvlNode *rt, int h = 0)
     : element{std:move(ele)}, left{lt}, right{rt}, height{h} { }
 
 };
@@ -24,13 +24,13 @@ public:
   	void printInorder();
   	bool search(string word);  //search function
   	int height(AvlNode *t);
-    void insert(const Comparable & x, AvlNode * & t);
+    void insert(const string & x, AvlNode * & t);
     void balance(AvlNode * & t);
     void rotateWithLeftChild(AvlNode * & k2);
     void doubleWithLeftChild(AvlNode * & k3);
     void rotateWithRightChild(AvlNode * & k2);
     void doubleWithRightChild(AvlNode * & k3);
-    void remove(const Comparable & x, AvlNode *& t) 
+    void remove(const string & x, AvlNode *& t) 
   	Node* getRoot();
   	void sort(); 				//sort function
   	void rangeSearch(string startWord, string endWord); //rangeSearch function 

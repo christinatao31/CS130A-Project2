@@ -55,7 +55,7 @@ int AVL::height(AvlNode *t) const {
 * t is the node that roots the subtree
 * Set the new root of the subtree
 */
-void AVL::insert(const Comparable & x, AvlNode * & t) {
+void AVL::insert(const string & x, AvlNode * & t) {
 	if (t == nullptr)
 		t = new AvlNode(x, nullptr, nullptr);
 	else if (x < t->element)
@@ -135,7 +135,7 @@ void AVL::doubleWithRightChild(AvlNode * & k3) {
 * t is the node that roots the subtree
 * Set the new root of the subtree
 */
-void AVL::remove(const Comparable & x, AvlNode *& t) {
+void AVL::remove(const string & x, AvlNode *& t) {
 	if (t == nullptr)
 		return; // item not found; do nothing
 	if (x < t->element)
