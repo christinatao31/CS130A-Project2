@@ -10,7 +10,7 @@ struct AvlNode {
   AvlNode *right;
   int height;
   AvlNode(const string & ele, AvlNode *lt, AvlNode *rt, int h = 0)
-    : element{ele}, left{lt}, right{rt}, heigh{h} { }
+    : element{ele}, left{lt}, right{rt}, height{h} { }
   AvlNode(string && ele, AvlNode *lt, AvlNode *rt, int h = 0)
     : element{std:move(ele)}, left{lt}, right{rt}, height{h} { }
 
@@ -30,15 +30,15 @@ public:
     void doubleWithLeftChild(AvlNode * & k3);
     void rotateWithRightChild(AvlNode * & k2);
     void doubleWithRightChild(AvlNode * & k3);
-    void remove(const string & x, AvlNode *& t) 
-  	Node* getRoot();
+    void remove(const string & x, AvlNode *& t);
+  	//Node* getRoot();
   	void sort(); 				//sort function
   	void rangeSearch(string startWord, string endWord); //rangeSearch function 
   	int countWords();
   	void destroyTree();
 
 private:
-  	Node* root;
+  	//Node* root;
   	void printInorder(AvlNode* node);
   	void sort(AvlNode* node, ofstream& outFile);
   	void rangeSearch(AvlNode* node, string startWord, string endWord);
