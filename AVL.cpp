@@ -62,12 +62,12 @@ static const int ALLOWED_IMBALANCE = 1;
 void AVL::balance(AvlNode * & t) {
 	if (t == nullptr)
 		return;
-	if (height(t->left) – height(t->right) > ALLOWED_IMBALANCE)
+	if (height(t->left) - height(t->right) > ALLOWED_IMBALANCE)
 		if (height(t->left->left) >= height(t->left->right))
 			rotateWithLeftChild(t);
 		else
 			doubleWithLeftChild(t);
-	else if (height(t->right) – height(t->left) > ALLOWED_IMBALANCE)
+	else if (height(t->right) - height(t->left) > ALLOWED_IMBALANCE)
 		if (height(t->right->right) >= height(t->right->left))
 			rotateWithRightChild(t);
 		else
@@ -136,7 +136,9 @@ void AVL::remove(const string & x, AvlNode *& t) {
 	else if (t->word < x)
 		remove(x, t->right);
 	else if (t->left != nullptr && t->right != nullptr) { // two children
-		t->word = findMin(t->right)->word;
+		AvlNode* temp = AvlNode;
+		while(temp->right != NULL) temp = temp->right;
+		t->word = temp;
 		remove(t->word, t->right);
 	}
 	else {
