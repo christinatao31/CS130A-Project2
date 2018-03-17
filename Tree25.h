@@ -48,8 +48,13 @@ class Tree25 {
   bool isLeaf(Node* node);
   void pushToParent(Node*& node, Node*& parent, Word* data, Node* left, Node* right);
   void nodeInsert(Node*& node, string word);
+  void remove(Node*& node, string word);
+  void removeFromNode(Node*& node, string word);
+  bool containsTwoKeys(Node* node);
   int getWordCount(Word* word) { return word->count; }
   void incrementWordCount(Word*& word) { word->count++; }
+  void decrementWordCount(Word*& word) { word->count--; }
+
 
  
 };

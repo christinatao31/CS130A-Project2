@@ -265,7 +265,91 @@ void Tree25::nodeInsert(Node*& node, string word) {
 }
 
 void Tree25::remove(string word) {
+  remove(root, word);
+}
 
+void Tree25::remove(Node*& node, string word) {
+  if(nodeContainsWord(node, word)) {
+    if(isLeaf(node) && containsTwoKeys(node)) {
+      removeFromNode(node, word);
+    } else{
+      Word* wordToDelete;
+      Node* leftChild, rightChild;
+      if(node->data1->word == word) {
+        wordToDelete = node->data1;
+        leftChild = node->child1;
+        rightChild = node->child2;
+      } else if(node->data2->word == word) {
+        wordToDelete = node->data2;
+        leftChild = node->child2;
+        rightChild = node->child3;
+      }else if(node->data3->word == word) {
+        wordToDelete = node->data3;
+        leftChild = node->child3;
+        rightChild = node->child4;
+      } else if(node->data4->word == word) {
+        wordToDelete = node->data4;
+        leftChild = node->child4;
+        rightChild = node->child5;
+      }
+      if(containsTwoKeys(leftChild)) {
+        if(leftChild->data4 != NULL) {
+          wordToDelete = leftChild->data4;
+          remove(leftChild, leftChild->data4->word);
+        } else if(leftChild->data3 != NULL) {
+          wordToDelete = leftChild->data3;
+          remove(leftChild, leftChild->data3->word);
+        } else {
+          wordToDelete = leftChild->data2;
+          remove(leftChild, leftChild->data2->word);
+        }
+      } else if(containsTwoKeys(rightChild)) {
+          wordToDelete = rightChild->data1;
+          remove(rightChild, rightChild->data1->word);
+        }
+
+    }
+  }
+}
+
+void Tree25::removeFromNode(Node*& node, string word) {
+  if(word == node->data1->word) {
+    if(node->data1->count > 1) decrementWordCount(node->data1);
+    else {
+      delete node->data1;
+      node->data1 = node->data2;
+      node->data2 = node->data3;
+      node->data3 = node->data4;
+      node->data4 = NULL;
+    }
+  }
+  else if(word == node->data2->word) {
+    if(node->data2->count > 1) decrementWordCount(node->data2);
+    else {
+      delete node->data2;
+      node->data2 = node->data3;
+      node->data3 = node->data4;
+      node->data4 = NULL;
+    }
+  }else if(word == node->data3->word) {
+    if(node->data3->count > 1) decrementWordCount(node->data3);
+    else {
+      delete node->data3;
+      node->data3 = node->data4;
+      node->data4 = NULL;
+    }
+  }else if(word == node->data4->word) {
+    if(node->data4->count > 1) decrementWordCount(node->data4);
+    else
+      delete node->data4;
+  }
+}
+
+
+bool Tree25::containsTwoKeys(Node* node) {
+  if(node->data1 != NULL && node->data2 != NULL)
+    return true;
+  return false;
 }
 
 void Tree25::sort() {
