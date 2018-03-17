@@ -271,23 +271,27 @@ void Tree25::remove(string word) {
 void Tree25::remove(Node*& node, string word) {
   if(nodeContainsWord(node, word)) {
     if(isLeaf(node) && containsTwoKeys(node)) {
-      removeFromNode(node, word);
-    } else{
+      removeFromLeaf(node, word);
+    }
+    else{
       Word* wordToDelete;
       Node* leftChild, rightChild;
       if(node->data1->word == word) {
         wordToDelete = node->data1;
         leftChild = node->child1;
         rightChild = node->child2;
-      } else if(node->data2->word == word) {
+      }
+      else if(node->data2->word == word) {
         wordToDelete = node->data2;
         leftChild = node->child2;
         rightChild = node->child3;
-      }else if(node->data3->word == word) {
+      }
+      else if(node->data3->word == word) {
         wordToDelete = node->data3;
         leftChild = node->child3;
         rightChild = node->child4;
-      } else if(node->data4->word == word) {
+      }
+      else if(node->data4->word == word) {
         wordToDelete = node->data4;
         leftChild = node->child4;
         rightChild = node->child5;
@@ -296,25 +300,98 @@ void Tree25::remove(Node*& node, string word) {
         if(leftChild->data4 != NULL) {
           wordToDelete = leftChild->data4;
           remove(leftChild, leftChild->data4->word);
-        } else if(leftChild->data3 != NULL) {
+        }
+	else if(leftChild->data3 != NULL) {
           wordToDelete = leftChild->data3;
           remove(leftChild, leftChild->data3->word);
-        } else {
+        }
+	else {
           wordToDelete = leftChild->data2;
           remove(leftChild, leftChild->data2->word);
         }
-      } else if(containsTwoKeys(rightChild)) {
+      }
+      else if(containsTwoKeys(rightChild)) {
           wordToDelete = rightChild->data1;
           remove(rightChild, rightChild->data1->word);
         }
-
+      else {
+	merge(node, leftChild, rightChild, wordToDelete);
+	remove(leftChild, word);
+      }
     }
+  }
+  else {
+    Node* childNode;
+    if (word < node->data1->word)
+      childNode = node->child1;
+    else if (word > node->data1->word && word < node->data2->word)
+      childNode = node->child2;
+    else if (word > node->data2->word && word < node->data3->word)
+      childNode = node->child3;
+    else if (word > node->data3->word && word < node->data4->word)
+      childNode = node->child4;
+    else
+      childNode = node->child5;
+
+    if (hasOneKey(childNode)) {
+      if (node->child1 == childNode) {
+	if (containsTwoKeys(node->child2)) {
+	  rotateCC(node, childNode, node->child2);
+	}
+	else {
+	  merge(node, node->child1, node->child2, node->data1);
+	}
+      }
+      else if (node->child2 == childNode) {
+	if (containsTwoKeys(node->child1)) {
+	  
+	}
+	else if (containsTwoKeys(node->child3)) {
+	  rotateCC(node, childNode, node->child3);
+	}
+	else {
+
+	}
+      }
+      else if (node->child3 == childNode) {
+	if (containsTwoKeys(node->child2)) {
+
+	}
+	else if (containsTwoKeys(node->child4)) {
+	  rotateCC(node, childNode, node->child4);
+	}
+	else {
+
+	}
+      }
+      else if (node->child4 == childNode) {
+	if (containsTwoKeys(node->child3)) {
+
+	}
+	else if (containsTwoKeys(node->child5)) {
+	  rotateCC(node, childNode, node->child5);
+	}
+	else {
+
+	}
+      }
+      else if (node->child5 == childNode) {
+	if (containsTwoKeys(node->child4)) {
+
+	}
+	else {
+
+	}
+      }
+    }
+    remove(childNode, word);
   }
 }
 
-void Tree25::removeFromNode(Node*& node, string word) {
+void Tree25::removeFromLeaf(Node*& node, string word) {
   if(word == node->data1->word) {
-    if(node->data1->count > 1) decrementWordCount(node->data1);
+    if(node->data1->count > 1)
+      decrementWordCount(node->data1);
     else {
       delete node->data1;
       node->data1 = node->data2;
@@ -324,22 +401,27 @@ void Tree25::removeFromNode(Node*& node, string word) {
     }
   }
   else if(word == node->data2->word) {
-    if(node->data2->count > 1) decrementWordCount(node->data2);
+    if(node->data2->count > 1)
+      decrementWordCount(node->data2);
     else {
       delete node->data2;
       node->data2 = node->data3;
       node->data3 = node->data4;
       node->data4 = NULL;
     }
-  }else if(word == node->data3->word) {
-    if(node->data3->count > 1) decrementWordCount(node->data3);
+  }
+  else if(word == node->data3->word) {
+    if(node->data3->count > 1)
+      decrementWordCount(node->data3);
     else {
       delete node->data3;
       node->data3 = node->data4;
       node->data4 = NULL;
     }
-  }else if(word == node->data4->word) {
-    if(node->data4->count > 1) decrementWordCount(node->data4);
+  }
+  else if(word == node->data4->word) {
+    if(node->data4->count > 1)
+      decrementWordCount(node->data4);
     else
       delete node->data4;
   }
@@ -352,8 +434,59 @@ bool Tree25::containsTwoKeys(Node* node) {
   return false;
 }
 
-void Tree25::sort() {
+void Tree25::merge(Node*& node, Node*& leftChild, Node*& rightChild, Word* wordToDelete) {
+  leftChild->data2 = wordToDelete;
+  leftChild->data3 = rightChild->data1;
+  if (node->data1 == wordToDelete) {
+    node->data1 = node->data2;
+    node->data2 = node->data3;
+    node->data3 = node->data4;
+    node->data4 = NULL;
+  }
+  else if (node->data2 == wordToDelete) {
+    node->data2 = node->data3;
+    node->data3 = node->data4;
+    node->data4 = NULL;
+  }
+  else if (node->data3 == wordToDelete) {
+    node->data3 = node->data4;
+    node->data4 = NULL;
+  }
+  else
+    node->data4 = NULL;
 
+  delete rightChild;
+}
+
+bool Tree25:containsOneKey(Node* node) {
+  if (node->data1 != NULL && node->data2 == NULL && node->data3 == NULL && node->data4 == NULL)
+    return true;
+  return false;
+}
+
+void Tree25::rotateCC(Node*& node, Node*& child, Node*& rightSibling) {
+  child->data2 = node->data1;
+  node->data1 = node->data2;
+  node->data2 = node->data3;
+  noede->data4 = NULL;
+  if (node->data2 == NULL)
+    node->data2 = rightSibling->data1;
+  else if (node->data3 == NULL)
+    node->data3 = rightSibling->data1;
+  else
+    node->data4 = rightSibling_data1;
+  rightSibling->data1 = rightSibling->data2;
+  rightSibling->data2 = rightSibling->data3;
+  rightSibling->data3 = rightSibling->data4;
+  rightSibling->data4 = NULL;
+}
+
+void Tree25::rotateCW(Node*& node, Node*& child, Node*& leftSibling) {
+
+}
+
+void Tree25::sort() {
+  
 }
 
 void Tree25::rangeSearch(string startWord, string endWord) {

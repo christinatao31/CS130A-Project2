@@ -49,8 +49,12 @@ class Tree25 {
   void pushToParent(Node*& node, Node*& parent, Word* data, Node* left, Node* right);
   void nodeInsert(Node*& node, string word);
   void remove(Node*& node, string word);
-  void removeFromNode(Node*& node, string word);
+  void removeFromLeaf(Node*& node, string word);
   bool containsTwoKeys(Node* node);
+  bool containsOneKey(Node* node);
+  void merge(Node*& node, Node*& leftChild, Node*& rightChild, Word* wordToDelete);
+  void rotateCC(Node*& node, Node*& child, Node*& rightSibling);
+  void rotateCW(Node*& node, Node*& child, Node*& leftSibling);
   int getWordCount(Word* word) { return word->count; }
   void incrementWordCount(Word*& word) { word->count++; }
   void decrementWordCount(Word*& word) { word->count--; }

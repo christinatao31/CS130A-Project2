@@ -5,7 +5,8 @@
 #include <set>
 #include <string>
 #include <boost/timer.hpp>
-#include "avl.h"
+#include "AVL.h"
+#include "Tree25.h"
 
 
 using namespace std;
@@ -63,10 +64,9 @@ int main() {
 	}
 	cout << "Done with inserting to AVL" << endl << endl;
 	
-	// for(string word: wordList) {
-	// 	tree25->insert(word);
-	// }
-	// tree25->traverse();
+	for(string word: wordList) {
+	  tree25->insert(word);
+	}
 
 	while (true) {
     	cin >> command;
