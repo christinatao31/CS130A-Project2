@@ -5,12 +5,17 @@
 
 using namespace std;
 
+struct Word {
+  string word;
+  int count;
+};
+
 struct Node {
-  string data1, data2, data3, data4;
+  Word *data1, *data2, *data3, *data4;
   Node *child1, *child2, *child3, *child4, *child5, *parent;
 
   Node() {
-    data1 = data2 = data3 = data4 = "";
+    data1 = data2 = data3 = data4 = NULL;
     child1 = child2 = child3 = child4 = child5 = parent = NULL;
   }
   
@@ -34,13 +39,19 @@ class Tree25 {
  private:
   Node* root;
   int height;
-  void initNode(struct Node*& node);
-  void insert(struct Node*& node, string word);
-  bool isFiveNode(struct Node* node);
-  bool nodeIsEmpty(struct Node* node);
-  bool isLeaf(struct Node* node);
-  void nodeInsert(struct Node* node, string word);
-  
+  void initNode(Node*& node);
+  void insert(Node*& node, string word);
+  bool nodeContainsWord(Node* node, string word);
+  void insertExistingWord(Node* node, string word);
+  bool isFiveNode(Node* node);
+  bool isRoot(Node* node);
+  bool isLeaf(Node* node);
+  void pushToParent(Node*& node, Node*& parent, Word* data, Node* left, Node* right);
+  void nodeInsert(Node*& node, string word);
+  int getWordCount(Word* word) { return word->count; }
+  void incrementWordCount(Word*& word) { word->count++; }
+
+ 
 };
 
 #endif

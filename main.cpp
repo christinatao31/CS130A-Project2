@@ -1,9 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <experimental/filesystem>
-//#include <filesystem>
+#include <set>
 #include <vector>
 
+#include "AVL.h"
+#include "Tree25.h"
 
 using namespace std;
 
@@ -13,44 +15,50 @@ namespace fs = experimental::filesystem;
 vector<fs::path> getPathNames(fs::path path) {
   vector<fs::path> pathNames;
   
-  for(auto& p: fs::recursive_directory_iterator(path))
-    if (is_regular_file(status(p)))
+  for(auto& p : fs::recursive_directory_iterator(path))
+    if (is_regular_file(status(p))) {
       pathNames.push_back(p.path());
+      //      cout << "path: " << p.path() << endl;
+    }
   
   return pathNames;
 }
 
 int main() {
 
-	vector<string> wordList;
-	ifstream file;
-	AVL *avl = new AVL;
-
-	for(const auto& pathName : getPathNames("hotels")) {
-		file.open(pathName);
-		if (!file.is_open()) return;
-
-	    string word;
-	    while (file >> word) {
-	        for(int i = 0; i < word.size(); i++) {
-	        	word[i] = tolower(word[i]);
-	        	if(!isalpha(word[i])) {
-	        		word.erase(i, 1);
-	        		i--;
-	        	}
-	        }
-	        if(STOP_WORDS.count(word) && word.size() > 0) {
-	        	wordList.push_back(word);
-	        }
-	    }
-	    file.close();
+  vector<string> wordList;
+  ifstream file;
+  AVL *avl = new AVL;
+  Tree25 *tree25 = new Tree25;
+  
+  for(const auto& pathName : getPathNames("hotels-small")) {
+    // cout << pathName << endl;
+    file.open(pathName);
+    
+    if (!file.is_open())
+      return 0;
+    
+    string word;
+    while (file >> word) {
+      // cout << word << endl;
+      for(int unsigned i = 0; i < word.size(); i++) {
+	word[i] = tolower(word[i]);
+	if(!isalpha(word[i])) {
+	  word.erase(i, 1);
+	  i--;
 	}
-
-	for(string word: wordList) {
-		avl->insert(word);
-	}
-	avl->printInorder();
-
+      }
+      if(!word.empty() && STOP_WORDS.count(word) == 0) {
+	wordList.push_back(word);
+      }
+    }
+    file.close();
+  }
+  for(string word: wordList) {
+    //avl->insert(word);
+    tree25->insert(word);
+  }
+  // avl->printInorder();
 }
 
 

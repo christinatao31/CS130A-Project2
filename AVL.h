@@ -4,13 +4,13 @@
 
 using namespace std;
 
-struct Node{
-	Node *left, *right;
+struct NodeAVL{
+	NodeAVL *left, *right;
 	string word;
 	int wordCount;
 	int height;
 
-	Node(string word) {
+	NodeAVL(string word) {
 		left = NULL;
 		right = NULL;
 		this->word = word;
@@ -27,7 +27,7 @@ public:
   	void printInorder();
   	bool search(string word);  //search function
   	void insert(string word);	//insert function
-  	Node* getRoot();
+  	NodeAVL* getRoot();
   	void deleteWord(string word);	//delete function
   	void sort(); 				//sort function
   	void rangeSearch(string startWord, string endWord); //rangeSearch function 
@@ -35,19 +35,20 @@ public:
   	void destroyTree();
 
 private:
-  	Node* root;
-  	void printInorder(Node* node);
-  	bool search(Node* node, string word);
-  	int height(Node* node);
-  	int getDiff(Node* node);
-  	void leftRotate(Node*& node);
-  	void rightRotate(Node*& node);
-  	void insert(Node*& node, string word);
-  	void deleteWord(Node*& node, string word);
-  	void sort(Node* node, ofstream& outFile);
-  	void rangeSearch(Node* node, string startWord, string endWord);
-  	int countWords(Node* node);
-  	void destroyTree(Node* node);
+  	NodeAVL* root;
+  	void printInorder(NodeAVL* node);
+  	bool search(NodeAVL* node, string word);
+  	int height(NodeAVL* node);
+  	int getDiff(NodeAVL* node);
+  	void leftRotate(NodeAVL*& node);
+  	void rightRotate(NodeAVL*& node);
+  	void insert(NodeAVL*& node, string word);
+	void balance(NodeAVL*& node);
+  	void deleteWord(NodeAVL*& node, string word);
+  	void sort(NodeAVL* node, ofstream& outFile);
+  	void rangeSearch(NodeAVL* node, string startWord, string endWord);
+  	int countWords(NodeAVL* node);
+  	void destroyTree(NodeAVL* node);
 
 };
 

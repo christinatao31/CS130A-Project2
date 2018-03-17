@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <fstream>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ AVL::~AVL() {
 void AVL::printInorder() {
 	printInorder(root);
 }
-void AVL::printInorder(Node* node) {
+void AVL::printInorder(NodeAVL* node) {
 	if(node == NULL) return;
 	printInorder(node->left);
 	cout << node->word << endl;
@@ -24,10 +25,10 @@ void AVL::printInorder(Node* node) {
 }
 
 bool AVL::search(string word) {
-	search(root, word);
+	return search(root, word);
 }
 
-bool AVL::search(Node* node, string word) {
+bool AVL::search(NodeAVL* node, string word) {
 	if(node == NULL) {
 		return false;
 	} 
@@ -40,28 +41,28 @@ bool AVL::search(Node* node, string word) {
 	}
 }
 
-int AVL::height(Node* node) {
+int AVL::height(NodeAVL* node) {
 	if(node == NULL)
 		return 0;
 	return node->height;
 }
-int AVL::getDiff(Node* node) {
+int AVL::getDiff(NodeAVL* node) {
 	if(node == NULL)
 		return 0;
 	return height(node->left) - height(node->right);
 }
-void AVL::rightRotate(Node*& z) {
-	Node* y = z->left;
-	Node* T3 = y->right;
+void AVL::rightRotate(NodeAVL*& z) {
+	NodeAVL* y = z->left;
+	NodeAVL* T3 = y->right;
 	y->right = z;
 	z->left = T3;
 
 	y->height = 1 + max(height(y->left), height(y->right));
 	z->height = 1 + max(height(z->left), height(z->right));
 }
-void AVL::leftRotate(Node*& z) {
-	Node* y = z->right;
-	Node* T3 = y->left;
+void AVL::leftRotate(NodeAVL*& z) {
+	NodeAVL* y = z->right;
+	NodeAVL* T3 = y->left;
 	y->left = z;
 	z->right = T3;
 
@@ -73,10 +74,10 @@ void AVL::insert(string word) {
 	insert(root, word);
 }
 
-void AVL::insert(Node*& node, string word) {
+void AVL::insert(NodeAVL*& node, string word) {
 	/* 1.  Perform the normal BST insertion */
 	if(node == NULL) {
-		Node* newNode = new Node(word);
+		NodeAVL* newNode = new NodeAVL(word);
 		node = newNode;
 	}
 	if(word.compare(node->word) > 0) {
@@ -119,9 +120,9 @@ void AVL::deleteWord(string word) {
 	deleteWord(root, word);
 }
 
-void AVL::deleteWord(Node*& node, string word) {
+void AVL::deleteWord(NodeAVL*& node, string word) {
 	if (node == NULL) return;
-	if(word.compare(node->word) < 0) {
+	if(word.compare(node->word) < 0)
 		deleteWord(node->left, word);
 	else if(word.compare(node->word) > 0) 
 		deleteWord(node->right, word);
@@ -130,15 +131,15 @@ void AVL::deleteWord(Node*& node, string word) {
 			node->wordCount = node->wordCount - 1;
 		else {
 			if(node->left == NULL) {
-				Node* temp = node;
+				NodeAVL* temp = node;
 				node = node->right;
 				delete temp;
 			} else if(node->right == NULL) {
-				Node* temp = node;
+				NodeAVL* temp = node;
 				node = node->left;
 				delete temp;
 			} else {
-				Node* temp = node;
+				NodeAVL* temp = node;
 				while(temp->right != NULL)
 					temp = temp->right;
 				node->word = temp->word;
@@ -171,7 +172,7 @@ void AVL::deleteWord(Node*& node, string word) {
 	}
 }
 
-void BST::sort() {
+void AVL::sort() {
   ofstream outFile;
   outFile.open("output.txt");
   sort(root, outFile);
@@ -179,7 +180,7 @@ void BST::sort() {
   outFile.close();
 }
 
-void AVL::sort(Node* node, ofstream& outFile) {
+void AVL::sort(NodeAVL* node, ofstream& outFile) {
   if (node == NULL)
     return;
   sort(node->left, outFile);
@@ -191,7 +192,7 @@ void AVL::rangeSearch(string startWord, string endWord) {
   rangeSearch(root, startWord, endWord);
 }
 
-void AVL::rangeSearch(Node* node, string startWord, string endWord) {
+void AVL::rangeSearch(NodeAVL* node, string startWord, string endWord) {
   if (node == NULL)
     return;
   if (startWord < node->word)
@@ -206,7 +207,7 @@ int AVL::countWords() {
   return countWords(root);
 }
 
-int AVL::countWords(Node* node) {
+int AVL::countWords(NodeAVL* node) {
   int count = 0;
   if (node == NULL)
     return 0;
@@ -221,7 +222,7 @@ void AVL::destroyTree() {
 }
 
 
-void AVL::destroyTree(Node* node) {
+void AVL::destroyTree(NodeAVL* node) {
   if(node != NULL) {
     destroyTree(node->left);
     destroyTree(node->right);
