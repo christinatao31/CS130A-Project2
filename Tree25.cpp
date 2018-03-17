@@ -48,14 +48,14 @@ void Tree25::insert(Node*& node, string word) {
     newLeft->data1 = node->data1;
     newLeft->child1 = node->child1;
     newLeft->child2 = node->child2;
-    newLeft->parent = node;
+    newLeft->parent = node->parent;
     Node* newRight = new Node();
     newRight->data1 = node->data3;
     newRight->data2 = node->data4;
     newRight->child1 = node->child3;
     newRight->child2 = node->child4;
     newRight->child3 = node->child5;
-    newRight->parent = node;
+    newRight->parent = node->parent;
 
     if (isRoot(node)) {
       cout << "node is a five-node root" << endl;
@@ -66,10 +66,15 @@ void Tree25::insert(Node*& node, string word) {
       newRoot->child1->parent = newRoot;
       newRoot->child2->parent = newRoot;
       root = newRoot;
-      if (word < root->data1->word)
+      cout << "created new root" << endl;
+      if (word < root->data1->word) {
+	cout << "descend into left child" << endl;
 	nodeInsert(root->child1, word);
-      else if (word > root->data1->word)
+      }
+      else if (word > root->data1->word) {
+	cout << "descend into right child" << endl;
 	nodeInsert(root->child2, word);
+      }
     }
     else {
       cout << "node is a five-node leaf" << endl;
@@ -160,47 +165,38 @@ bool Tree25::isLeaf(Node* node) {
 }
 
 void Tree25::pushToParent(Node*& node, Node*& parent, Word* data, Node* left, Node* right) {
-  if (node->data1 == data) {
-    node->data1 = node->data2;
-    node->data2 = node->data3;
-    node->data3 = node->data4;
-    node->data4 = NULL;
-    cout << "mid replaced in data1" << endl;
-  }
-  else if (node->data2 == data) {
-    node->data2 = node->data3;
-    node->data3 = node->data4;
-    node->data4 = NULL;
-    cout << "mid replaced in data2" << endl;
-  }
-  else if (node->data3 == data) {
-    node->data3 = node->data4;
-    node->data4 = NULL;
-    cout << "mid replaced in data3" << endl;
-  }
-  else if(node->data4 == data) {
-    node->data4 = NULL;
-    cout << "mid replaced in data4" << endl;
-  }
+  node->data2 = node->data3;
+  node->data3 = node->data4;
+  node->data4 = NULL;
+  cout << "mid replaced" << endl;
 
   if (parent->data2 == NULL) {
+    cout << "data1 " << parent->data1->word << endl;
     parent->data2 = new Word;
     parent->data2 = data;
     cout << "mid pushed to parent data2" << endl;
+    cout << "data2 " << parent->data2->word << endl;
     parent->child2 = left;
     parent->child3 = right;
   }
   else if (parent->data3 == NULL) {
+    cout << "data1 " << parent->data1->word << endl;
+    cout << "data2 " << parent->data2->word << endl;
     parent->data3 = new Word;
     parent->data3 = data;
     cout << "mid pushed to parent data3" << endl;
+    cout << "data3 " << parent->data3->word << endl;
     parent->child3 = left;
     parent->child4 = right;
   }
   else if (parent->data4 == NULL) {
+    cout << "data1 " << parent->data1->word << endl;
+    cout << "data2 " << parent->data2->word << endl;
+    cout << "data3 " << parent->data3->word << endl;
     parent->data4 = new Word;
     parent->data4 = data;
-    cout << "mid push to parent data4" << endl;
+    cout << "mid pushed to parent data4" << endl;
+    cout << "data4 " << parent->data4->word << endl;
     parent->child4 = left;
     parent->child5 = right;
   }
