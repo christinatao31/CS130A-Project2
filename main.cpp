@@ -4,7 +4,8 @@
 #include <vector>
 #include <set>
 #include <string>
-#include "AVL.h"
+#include <boost/timer.hpp>
+#include "avl.h"
 
 
 using namespace std;
@@ -26,9 +27,14 @@ int main() {
 
 	vector<string> wordList;
 	ifstream file;
-	AVL *avl = new AVL;
 	string word;
-	AvlNode* root = NULL;
+	int command;
+
+	AVL *avl = new AVL;
+	//Tree25 *tree25 = new Tree25;
+	struct AVLNode *root = NULL;
+	boost::timer t;
+ 	double elapsedTimeAVL;
 
 
 	for(const auto& pathName : getPathNames("hotels")) {
@@ -53,8 +59,97 @@ int main() {
 	}
 
 	for(string word: wordList) {
-		avl->insert(word, root);
+		root = avl->insert(root, word);
 	}
-	avl->printInorder(root);
+	cout << "Done with inserting to AVL" << endl << endl;
+	
+	// for(string word: wordList) {
+	// 	tree25->insert(word);
+	// }
+	// tree25->traverse();
+
+	while (true) {
+    	cin >> command;
+
+    	switch(command) {
+    	case 1:
+      	{
+			string wordToSearch;
+			bool wordExistsAVL;
+			cin >> wordToSearch;
+			t.restart();
+			wordExistsAVL = avl->search(root, wordToSearch);
+			elapsedTimeAVL = t.elapsed();
+			// t.restart();
+			// wordExistsHT = hashTable->search(wordToSearch);
+			// elapsedTimeHT = t.elapsed();
+			if (wordExistsAVL)
+				cout << "True" << endl;
+			else
+				cout << "False" << endl;
+			cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+			//cout << fixed << "Hash: " << elapsedTimeHT << endl;
+		    }
+     		break;
+    	case 2:
+      	{
+			string wordToInsert;
+			cin >> wordToInsert;
+			t.restart();
+			avl->insert(root, wordToInsert);
+			elapsedTimeAVL = t.elapsed();
+			// t.restart();
+			// hashTable->insert(wordToInsert);
+			// elapsedTimeHT = t.elapsed();
+			cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+			//cout << fixed << "Hash: " << elapsedTimeHT << endl;
+			avl->inOrder(root);
+		}
+		break;
+    	case 3:
+      	{
+			string wordToDelete;
+			cin >> wordToDelete;
+			t.restart();
+			root = avl->deleteNode(root, wordToDelete);
+			elapsedTimeAVL = t.elapsed();
+			// t.restart();
+			// hashTable->deleteWord(wordToDelete);
+			// elapsedTimeHT = t.elapsed();
+			cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+			//cout << fixed << "Hash: " << elapsedTimeHT << endl;
+			avl->inOrder(root);
+    	}
+    	break;
+    	case 4:
+     	{
+			t.restart();
+			avl->sort(root);
+			elapsedTimeAVL = t.elapsed();
+			// t.restart();
+			// hashTable->sort();
+			// elapsedTimeHT = t.elapsed();
+			cout << "/output.txt" << endl;
+			cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+			//cout << fixed << "Hash: " << elapsedTimeHT << endl;
+		}
+		break;
+    	case 5:
+      	{
+			string startWord, endWord;
+			cin >> startWord >> endWord;
+			t.restart();
+			avl->rangeSearch(root, startWord, endWord);
+			elapsedTimeAVL = t.elapsed();
+			cout << endl;
+			// t.restart();
+			// hashTable->rangeSearch(startWord, endWord);
+			// elapsedTimeHT = t.elapsed();
+			cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+			//cout << fixed << "Hash: " << elapsedTimeHT << endl;
+      	}
+   		}
+	}
+	return 0;
 
 }
