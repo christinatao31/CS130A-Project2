@@ -1,6 +1,6 @@
 CXX=g++
 
-CXXFLAGS= -std=c++1z -Wall -g
+CXXFLAGS= -std=c++17 -Wall -g
 
 all: main
 

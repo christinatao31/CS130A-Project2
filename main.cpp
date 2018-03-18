@@ -50,9 +50,9 @@ int main() {
 	  i--;
 	}
       }
-      if(STOP_WORDS.count(word)==0 && word.size() > 0) {
+      //      if(STOP_WORDS.count(word)==0 && word.size() > 0) {
 	wordList.push_back(word);
-      }
+	//      }
     }
     file.close();
   }
@@ -61,9 +61,7 @@ int main() {
     // root = avl->insert(root, word);
     tree25->insert(word);
   }
-
-  tree25->printInorder();
-
+  
   while (true) {
     cin >> command;
 

@@ -2,6 +2,7 @@
 #define tree25_h
 
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -36,6 +37,7 @@ class Tree25 {
   void sort();
   void rangeSearch(string startWord, string endWord);  
   void printInorder();
+  Node* getRoot() { return root; }
   
  private:
   Node* root;
@@ -52,15 +54,18 @@ class Tree25 {
   void remove(Node*& node, string word);
   void removeFromLeaf(Node*& node, string word);
   bool containsTwoKeys(Node* node);
+  bool containsTwoWords(Node* node);
   bool containsOneKey(Node* node);
   void merge(Node*& node, Node*& leftChild, Node*& rightChild, Word* wordToDelete);
   void rotateCC(Node*& node, Node*& child, Node*& rightSibling);
   void rotateCW(Node*& node, Node*& child, Node*& leftSibling);
+  void sort(Node* node, ofstream& outFile);
+  void rangeSearch(Node* node, string startWord, string endWord);
   void printInorder(Node* node);
   int getWordCount(Word* word) { return word->count; }
   void incrementWordCount(Word*& word) { word->count++; }
   void decrementWordCount(Word*& word) { word->count--; }
- 
+  
 };
 
 #endif
