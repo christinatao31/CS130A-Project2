@@ -35,11 +35,12 @@ class Tree25 {
   void remove(string word);
   void sort();
   void rangeSearch(string startWord, string endWord);  
+  void printInorder();
   
  private:
   Node* root;
   int height;
-  void initNode(Node*& node);
+  bool search(Node* node, string word);
   void insert(Node*& node, string word);
   bool nodeContainsWord(Node* node, string word);
   void insertExistingWord(Node* node, string word);
@@ -55,11 +56,10 @@ class Tree25 {
   void merge(Node*& node, Node*& leftChild, Node*& rightChild, Word* wordToDelete);
   void rotateCC(Node*& node, Node*& child, Node*& rightSibling);
   void rotateCW(Node*& node, Node*& child, Node*& leftSibling);
+  void printInorder(Node* node);
   int getWordCount(Word* word) { return word->count; }
   void incrementWordCount(Word*& word) { word->count++; }
   void decrementWordCount(Word*& word) { word->count--; }
-
-
  
 };
 
