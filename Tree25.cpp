@@ -60,7 +60,7 @@ bool Tree25::search(Node* node, string word) {
 void Tree25::insert(string word) {
   cout << "insert " << word << endl;
   insert(root, word);
-  printInorder();
+  //  printInorder();
   cout << "insert " << word << " finished" << endl << endl;
 }
 
@@ -77,6 +77,7 @@ void Tree25::insert(Node*& node, string word) {
   if (nodeContainsWord(node, word)) {
     cout << word << " already exists. increment count" << endl;
     insertExistingWord(node, word);
+    return;
   }
   
   // If the current node is a 5-node:
@@ -96,10 +97,12 @@ void Tree25::insert(Node*& node, string word) {
     cout << "left child is " << leftChild->data1->word << "(" << leftChild->data1->count << ")" << endl;
     leftChild->child1 = new Node;
     leftChild->child1 = node->child1;
-    //leftChild->child1->parent = leftChild;
+    if (leftChild->child1 != NULL)
+      leftChild->child1->parent = leftChild;
     leftChild->child2 = new Node;
     leftChild->child2 = node->child2;
-    //leftChild->child2->parent = leftChild;
+    if (leftChild->child2 != NULL)
+      leftChild->child2->parent = leftChild;
     Node* rightChild = new Node;
     rightChild->data1 = new Word;
     rightChild->data1->word = node->data3->word;
@@ -111,13 +114,16 @@ void Tree25::insert(Node*& node, string word) {
       rightChild->data2->word << "(" << rightChild->data2->count << ")" << endl;
     rightChild->child1 = new Node;
     rightChild->child1 = node->child3;
-    // rightChild->child1->parent = rightChild;
+    if (rightChild->child1 != NULL)
+      rightChild->child1->parent = rightChild;
     rightChild->child2 = new Node;
     rightChild->child2 = node->child4;
-    //rightChild->child2->parent = rightChild;
+    if (rightChild->child2 != NULL)
+      rightChild->child2->parent = rightChild;
     rightChild->child3 = new Node;
     rightChild->child3 = node->child5;
-    //rightChild->child3->parent = rightChild;
+    if (rightChild->child3 != NULL)
+      rightChild->child3->parent = rightChild;
     
     // Insert the word into the corresponding left or right child
     if (word < mid->word) {
@@ -129,9 +135,6 @@ void Tree25::insert(Node*& node, string word) {
     else if (word > mid->word) {
       cout << "insert in right child" << endl;
       insert(rightChild, word);
-      // cout << "right child is " << rightChild->data1->word << "(" << rightChild->data1->count << "), " <<
-      //   rightChild->data2->word << "(" << rightChild->data2->count << "), " <<
-      //   rightChild->data3->word << "(" << rightChild->data3->count << ")" << endl;
     }
     
     // If the node is the root, the saved middle value becomes the new root
@@ -160,15 +163,26 @@ void Tree25::insert(Node*& node, string word) {
       Node* parent = node->parent;
       cout << "parent data1 = " << parent->data1->word << endl;
       if (mid->word < parent->data1->word) {
-	// parent->data4 = new Word;
 	parent->data4 = parent->data3;
 	parent->data3 = parent->data2;
 	parent->data2 = parent->data1;
 	parent->data1 = mid;
 	parent->child5 = new Node;
 	parent->child5 = parent->child4;
+	if (parent->child5 != NULL) {
+	  parent->child5->parent = parent;
+	  cout << "set parent of child5" << endl;
+	}
 	parent->child4 = parent->child3;
+	if (parent->child4 != NULL) {
+	  parent->child4->parent = parent;
+	  cout << "set parent of child4" << endl;
+	}
 	parent->child3 = parent->child2;
+	if (parent->child3 != NULL) {
+	  parent->child3->parent = parent;
+	  cout << "set parent of child3" << endl;
+	}
 	parent->child2 = rightChild;
 	parent->child1 = leftChild;
 	parent->child2->parent = parent;
@@ -176,14 +190,19 @@ void Tree25::insert(Node*& node, string word) {
 	cout << "pushed mid to parent data1" << endl;
       }
       else if (mid->word > parent->data1->word && (parent->data2 == NULL || mid->word < parent->data2->word)) {
-	// parent->data4 = new Word;
 	parent->data4 = parent->data3;
 	parent->data3 = parent->data2;
 	parent->data2 = mid;
-	// parent->child5 = new Node;
 	parent->child5 = parent->child4;
-	// parent->child5->parent = parent;;
+	if (parent->child5 != NULL) {
+	  parent->child5->parent = parent;
+	  cout << "set parent of child5" << endl;
+	}
 	parent->child4 = parent->child3;
+	if (parent->child4 != NULL) {
+	  parent->child4->parent = parent;
+	  cout << "set parent of child4" << endl;
+	}
 	parent->child3 = rightChild;
 	parent->child2 = leftChild;
 	parent->child3->parent = parent;
@@ -191,12 +210,13 @@ void Tree25::insert(Node*& node, string word) {
 	cout << "pushed mid to parent data2" << endl;
       }
       else if (mid->word > parent->data2->word && (parent->data3 == NULL || mid->word < parent->data3->word)) {
-	// parent->data4 = new Word;
 	parent->data4 = parent->data3;
 	parent->data3 = mid;
-	// parent->child5 = new Node;
 	parent->child5 = parent->child4;
-	// parent->child5->parent = parent;
+	if (parent->child5 != NULL) {
+	  parent->child5->parent = parent;
+	  cout << "set parent of chid5" << endl;
+	}
 	parent->child4 = rightChild;
 	parent->child3 = leftChild;
 	parent->child4->parent = parent;
@@ -206,7 +226,6 @@ void Tree25::insert(Node*& node, string word) {
       else {
 	cout << "parent data3 = " << parent->data3->word << endl;
 	parent->data4 = mid;
-	// parent->child5 = new Node;
 	parent->child5 = rightChild;
 	parent->child4 = leftChild;
 	parent->child5->parent = parent;
@@ -250,7 +269,45 @@ void Tree25::insert(Node*& node, string word) {
 }
 
 void Tree25::remove(string word) {
+  remove(root, word);
+}
 
+void Tree25::remove(Node*& node, string word) {
+  if (nodeContainsWord(node, word)) {
+    // If the element is in the node and the node is a leaf containing at elast 2 keys, just
+    // remove it from the node
+    if (isLeaf(node) && containsTwoKeys(node)) {
+      cout << "word is in a leaf with at least two keys" << endl;
+      removeFromLeaf(node, word);
+    }
+    else if (!isLeaf(node)) {
+      cout << "word is in an internal node" << endl;
+      // If the element's left child has at least 2 keys, replace the element with its predecessor
+      // p and then recursively delete p
+
+      // If the element's right child has at least 2 keys, replace the element with its successor
+      // s and recursively delete s
+
+      // If both children have only 1 key, merge the right child into the left child and push the
+      // element to delete into the left child
+      // Free the right child and recursively delete the element to delete from the left child
+    }
+  }
+  else {
+    cout << "node does not contain " << word;
+    // Find the child to descend into
+
+    // If the child has only key and has an immediate sibling with at least 2 keys,
+    // move an element down from the parent into the child and move an element from the
+    // sibling into the parent
+
+    // If both the child and its immediate siblings have only 1 key each, merge the child node
+    // with one of the siblings and move an element down from the parent node into the merged node
+    // The element from the parent will be in the middle of the node
+    // Free the node whose elements were merged into the other node
+
+    // Descend into the child, and recursively call remove on that child
+  }
 }
 
 void Tree25::sort() {
@@ -289,19 +346,19 @@ void Tree25::rangeSearch(Node* node, string startWord, string endWord) {
 
   rangeSearch(node->child1, startWord, endWord);
   if(node->data1->word >= startWord && node->data1->word <= endWord)
-    cout << node->data1->word << " " << node->data1->count << endl;
+    cout << node->data1->word << endl;
   
   rangeSearch(node->child2, startWord, endWord);
   if (node->data2 != NULL && node->data2->word >= startWord && node->data2->word <= endWord)
-      cout << node->data2->word << " " << node->data2->count << endl;
+      cout << node->data2->word << endl;
 
   rangeSearch(node->child3, startWord, endWord);
   if (node->data3 != NULL && node->data3->word >= startWord && node->data3->word <= endWord)
-    cout << node->data3->word << " " << node->data3->count << endl;
+    cout << node->data3->word << endl;
 
   rangeSearch(node->child4, startWord, endWord);
   if (node->data4 != NULL && node->data4->word >= startWord && node->data4->word <= endWord)
-    cout << node->data4->word << " " << node->data4->count << endl;
+    cout << node->data4->word  << endl;
 
   rangeSearch(node->child5, startWord, endWord);
 }
@@ -400,6 +457,74 @@ bool Tree25::isRoot(Node* node) {
   return false;
 }
 
+void Tree25::removeFromLeaf(Node*& node, string word) {
+  if (word == node->data1->word) {
+    cout << "word is in data1" << endl;
+    if (node->data1->count > 1) {
+      cout << "decrement count" << endl;
+      decrementWordCount(node->data1);
+    }
+    else {
+      cout << "remove from data1" << endl;
+      delete node->data1;
+      node->data1 = node->data2;
+      node->data2 = node->data3;
+      node->data3 = node->data4;
+      node->data4 = NULL;
+    }
+  }
+  else if (word == node->data2->word) {
+    cout << "word is in data2" << endl;
+    if (node->data2-> count > 1) {
+      cout << "decrement count" << endl;
+      decrementWordCount(node->data2);
+    }
+    else {
+      cout << "remove from data2" << endl;
+      delete node->data2;
+      node->data2 = node->data3;
+      node->data3 = node->data4;
+      node->data4 = NULL;
+    }
+  }
+  else if (word == node->data3->word) {
+    cout << "word is in data3" << endl;
+    if (node->data3->count > 1) {
+      cout << "decrement count" << endl;
+      decrementWordCount(node->data3);
+    }
+    else {
+      cout << "remove from data3" << endl;
+      delete node->data3;
+      node->data3 = node->data4;
+      node->data4 = NULL;
+    }
+  }
+  else {
+    cout << "word is in data4" << endl;
+    if (node->data4->count > 1) {
+      cout << "decrement count" << endl;
+      decrementWordCount(node->data4);
+    }
+    else {
+      delete node->data4;
+      node->data4 = NULL;
+    }
+  }
+}
+
+bool Tree25::containsTwoKeys(Node* node) {
+  if (node == NULL)
+    return false;
+
+  if ((node->data2 == NULL && node->data1->count >= 2) ||
+      (node->data2 != NULL && node->data1->count >= 1 && node->data2->count >=1))
+    return true;
+
+  return false;
+      
+}
+
 void Tree25::printInorder() {
   printInorder(root);
 }
@@ -407,17 +532,30 @@ void Tree25::printInorder() {
 void Tree25::printInorder(Node* node) {
   if (node == NULL)
     return;
-
+  
   printInorder(node->child1);
   cout << "data1: " << node->data1->word << "(" << node->data1->count << ")" << endl;
+  if (node->parent != NULL)
+    cout << "parent of " << node->data1->word << " = " << node->parent->data1->word << endl;
   printInorder(node->child2);
-  if (node->data2 != NULL)
+  if (node->data2 != NULL) {
     cout << "data2: " << node->data2->word << "(" << node->data2->count << ")" << endl;
+    if (node->parent != NULL)
+      cout << "parent of " << node->data2->word << " = " << node->parent->data1->word << endl;
+  }
   printInorder(node->child3);
-  if (node->data3 != NULL)
+  if (node->data3 != NULL) {
     cout << "data3: " << node->data3->word << "(" << node->data3->count << ")" << endl;
+    if (node->parent != NULL)
+      cout << "parent of " << node->data3->word << " = " << node->parent->data1->word << endl;
+  }
   printInorder(node->child4);
-  if (node->data4 != NULL)
+  if (node->data4 != NULL) {
     cout << "data4: " << node->data4->word << "(" << node->data4->count << ")" << endl;
+    if (node->parent != NULL) {
+      cout << "parent of " << node->data4->word << " = " << node->parent->data1->word << endl;
+    }
+  }
   printInorder(node->child5);
+  
 }

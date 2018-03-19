@@ -31,14 +31,14 @@ int main() {
   string word;
   int command;
 
-  // AVL *avl = new AVL;
+  AVL *avl = new AVL;
   Tree25 *tree25 = new Tree25;
-  // struct AVLNode *root = NULL;
-  // boost::timer t;
-  // double elapsedTimeAVL;
+  struct AVLNode *root = NULL;
+  boost::timer t;
+  double elapsedTimeAVL;
+  double elapsedTime25Tree;
 
-
-  for(const auto& pathName : getPathNames("sample")) {
+  for(const auto& pathName : getPathNames("hotels")) {
     file.open(pathName);
     if (!file.is_open()) { }
 
@@ -50,15 +50,15 @@ int main() {
 	  i--;
 	}
       }
-      //      if(STOP_WORDS.count(word)==0 && word.size() > 0) {
+      if(STOP_WORDS.count(word)==0 && word.size() > 0) {
 	wordList.push_back(word);
-	//      }
+      }
     }
     file.close();
   }
 
   for(string word: wordList) {
-    // root = avl->insert(root, word);
+    root = avl->insert(root, word);
     tree25->insert(word);
   }
   
@@ -69,67 +69,79 @@ int main() {
     case 1:
       {
 	string wordToSearch;
-	// bool wordExistsAVL;
+	bool wordExistsAVL;
 	bool wordExistsTree25;
 	cin >> wordToSearch;
-	// t.restart();
-	// wordExistsAVL = avl->search(root, wordToSearch);
-	// elapsedTimeAVL = t.elapsed();
-	// if (wordExistsAVL)
+	t.restart();
+	wordExistsAVL = avl->search(root, wordToSearch);
+	elapsedTimeAVL = t.elapsed();
+	t.restart();
 	wordExistsTree25 = tree25->search(wordToSearch);
-	if (wordExistsTree25)
+	elapsedTime25Tree = t.elapsed();
+	if (wordExistsAVL && wordExistsTree25)
 	  cout << "True" << endl;
 	else
 	  cout << "False" << endl;
-	// cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+	cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+	cout << fixed << "25 Tree: " << elapsedTime25Tree << endl;
       }
       break;
     case 2:
       {
-	string wordToInsert;
+        string wordToInsert;
 	cin >> wordToInsert;
-	// t.restart();
-	// avl->insert(root, wordToInsert);
+	t.restart();
+	avl->insert(root, wordToInsert);
+	elapsedTimeAVL = t.elapsed();
+	t.restart();
 	tree25->insert(wordToInsert);
-	// elapsedTimeAVL = t.elapsed();
-	// cout << fixed << "AVL: " << elapsedTimeAVL << endl;
-	// avl->inOrder(root);
-	tree25->printInorder();
+	elapsedTime25Tree = t.elapsed();
+	cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+	cout << fixed << "25 Tree: " << elapsedTime25Tree << endl;
+	//	tree25->printInorder();
       }
       break;
     case 3:
       {
 	string wordToDelete;
 	cin >> wordToDelete;
+	t.restart();
+	root = avl->deleteNode(root, wordToDelete);
+	elapsedTimeAVL = t.elapsed();
 	// t.restart();
-	tree25->remove(wordToDelete);
-	// root = avl->deleteNode(root, wordToDelete);
-	// elapsedTimeAVL = t.elapsed();
-	// cout << fixed << "AVL: " << elapsedTimeAVL << endl;
-	// avl->inOrder(root);
-	tree25->printInorder();
+	// tree25->remove(wordToDelete);
+	// elapsedTime25Tree = t.elapsed();
+	cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+	// cout << fixed << "25 Tree: " << elapsedTime25Tree << endl;
+	// tree25->printInorder();
       }
       break;
     case 4:
       {
-	// t.restart();
-	// avl->sort(root);
-	// elapsedTimeAVL = t.elapsed();
+	t.restart();
+	avl->sort(root);
+	elapsedTimeAVL = t.elapsed();
+	t.restart();
 	tree25->sort();
- 	cout << "/output.txt" << endl;
-	// cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+	elapsedTime25Tree = t.elapsed();
+	cout << "/output.txt" << endl;
+	cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+	cout << fixed << "25 Tree: " << elapsedTime25Tree << endl;
       }
       break;
     case 5:
       {
 	string startWord, endWord;
 	cin >> startWord >> endWord;
-	// t.restart();
-	// avl->rangeSearch(root, startWord, endWord);
-	// elapsedTimeAVL = t.elapsed();
+	t.restart();
+	avl->rangeSearch(root, startWord, endWord);
+	elapsedTimeAVL = t.elapsed();
 	cout << endl;
+	t.restart();
 	tree25->rangeSearch(startWord, endWord);
-	// cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+	elapsedTime25Tree = t.elapsed();
+	cout << fixed << "AVL: " << elapsedTimeAVL << endl;
+	cout << fixed << "25 Tree: " << elapsedTime25Tree << endl;
       }
     }
   }
