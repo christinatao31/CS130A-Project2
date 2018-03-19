@@ -45,12 +45,12 @@ class Tree25 {
   bool search(Node* node, string word);
   void insert(Node*& node, string word);
   bool nodeContainsWord(Node* node, string word);
-  void insertExistingWord(Node* node, string word);
+  void insertExistingWord(Node*& node, string word);
   bool isFiveNode(Node* node);
   bool isRoot(Node* node);
   bool isLeaf(Node* node);
   void pushToParent(Node*& node, Node*& parent, Word* data, Node* left, Node* right);
-  void nodeInsert(Node*& node, string word);
+  void insertIntoLeaf(Node*& node, string word);
   void remove(Node*& node, string word);
   void removeFromLeaf(Node*& node, string word);
   bool containsTwoKeys(Node* node);
