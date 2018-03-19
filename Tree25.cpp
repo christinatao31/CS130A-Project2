@@ -61,13 +61,13 @@ void Tree25::insert(string word) {
   cout << "insert " << word << endl;
   insert(root, word);
   printInorder();
-  cout << "finished insert" << endl << endl;
+  cout << "insert " << word << " finished" << endl << endl;
 }
 
 void Tree25::insert(Node*& node, string word) {
   if (node == NULL) {
     cout << "node is NULL. create a new node and add " << word << endl;
-    node = new Node();
+    node = new Node;
     node->data1 = new Word;
     node->data1->word = word;
     node->data1->count = 1;
@@ -81,22 +81,170 @@ void Tree25::insert(Node*& node, string word) {
   
   // If the current node is a 5-node:
   if (isFiveNode(node)) {
-    // Remove and save the middle value to get a 4-node
-    // Split the remaining 4-node up into a 2-node and 3-node
-    // The 2-node and 3-node will be the left and right child of the middle value, respectively
+    cout << "node is a 5-node" << endl;
+    
+    // Save the middle value, which will be data2
+    Word* mid = new Word;
+    mid->word = node->data2->word;
+    mid->count = node->data2->count;
+    cout << "mid is " << mid->word << "(" << mid->count << ")" << endl;
+
+    Node* leftChild = new Node;
+    leftChild->data1 = new Word;
+    leftChild->data1->word = node->data1->word;
+    leftChild->data1->count = node->data1->count;
+    cout << "left child is " << leftChild->data1->word << "(" << leftChild->data1->count << ")" << endl;
+    leftChild->child1 = new Node;
+    leftChild->child1 = node->child1;
+    //leftChild->child1->parent = leftChild;
+    leftChild->child2 = new Node;
+    leftChild->child2 = node->child2;
+    //leftChild->child2->parent = leftChild;
+    Node* rightChild = new Node;
+    rightChild->data1 = new Word;
+    rightChild->data1->word = node->data3->word;
+    rightChild->data1->count = node->data3->count;
+    rightChild->data2 = new Word;
+    rightChild->data2->word = node->data4->word;
+    rightChild->data2->count = node->data4->count;
+    cout << "right child is " << rightChild->data1->word << "(" << rightChild->data1->count << "), " <<
+      rightChild->data2->word << "(" << rightChild->data2->count << ")" << endl;
+    rightChild->child1 = new Node;
+    rightChild->child1 = node->child3;
+    // rightChild->child1->parent = rightChild;
+    rightChild->child2 = new Node;
+    rightChild->child2 = node->child4;
+    //rightChild->child2->parent = rightChild;
+    rightChild->child3 = new Node;
+    rightChild->child3 = node->child5;
+    //rightChild->child3->parent = rightChild;
+    
     // Insert the word into the corresponding left or right child
+    if (word < mid->word) {
+      cout << "insert in left child" << endl;
+      insert(leftChild, word);
+      // cout << "left child is " << leftChild->data1->word << "(" << leftChild->data1->count << "), " <<
+      //   leftChild->data2->word << "(" << leftChild->data2->count << ")" << endl;
+    }
+    else if (word > mid->word) {
+      cout << "insert in right child" << endl;
+      insert(rightChild, word);
+      // cout << "right child is " << rightChild->data1->word << "(" << rightChild->data1->count << "), " <<
+      //   rightChild->data2->word << "(" << rightChild->data2->count << "), " <<
+      //   rightChild->data3->word << "(" << rightChild->data3->count << ")" << endl;
+    }
     
     // If the node is the root, the saved middle value becomes the new root
     // Ascend into the root and set child1 and child2 to be the left and right child, respectively
+    if (isRoot(node)) {
+      cout << "node is the root" << endl;
+      Node* newRoot = new Node;
+      // newRoot->data1 = new Word;
+      // newRoot->data1->word = mid->word;
+      // newRoot->data1->count = mid->count;
+      newRoot->data1 = mid;
+      newRoot->child1 = leftChild;
+      newRoot->child2 = rightChild;
+      // Set the parent of child1 and child2 equal to the new root
+      newRoot->child1->parent = newRoot;
+      newRoot->child2->parent = newRoot;
+      root = newRoot;
+      node = root;
+      cout << "new root is " << root->data1->word << endl;
+    }
     
     // Otherwise, push the middle value up into the parent node
-    // Ascend into the root and reorganize the children, adding in the new left and right children
+    // Reorganize the children, adding in the new left and right children
+    else {
+      cout << "node is not the root" << endl;
+      Node* parent = node->parent;
+      cout << "parent data1 = " << parent->data1->word << endl;
+      if (mid->word < parent->data1->word) {
+	// parent->data4 = new Word;
+	parent->data4 = parent->data3;
+	parent->data3 = parent->data2;
+	parent->data2 = parent->data1;
+	parent->data1 = mid;
+	parent->child5 = new Node;
+	parent->child5 = parent->child4;
+	parent->child4 = parent->child3;
+	parent->child3 = parent->child2;
+	parent->child2 = rightChild;
+	parent->child1 = leftChild;
+	parent->child2->parent = parent;
+	parent->child1->parent = parent;
+	cout << "pushed mid to parent data1" << endl;
+      }
+      else if (mid->word > parent->data1->word && (parent->data2 == NULL || mid->word < parent->data2->word)) {
+	// parent->data4 = new Word;
+	parent->data4 = parent->data3;
+	parent->data3 = parent->data2;
+	parent->data2 = mid;
+	// parent->child5 = new Node;
+	parent->child5 = parent->child4;
+	// parent->child5->parent = parent;;
+	parent->child4 = parent->child3;
+	parent->child3 = rightChild;
+	parent->child2 = leftChild;
+	parent->child3->parent = parent;
+	parent->child2->parent = parent;
+	cout << "pushed mid to parent data2" << endl;
+      }
+      else if (mid->word > parent->data2->word && (parent->data3 == NULL || mid->word < parent->data3->word)) {
+	// parent->data4 = new Word;
+	parent->data4 = parent->data3;
+	parent->data3 = mid;
+	// parent->child5 = new Node;
+	parent->child5 = parent->child4;
+	// parent->child5->parent = parent;
+	parent->child4 = rightChild;
+	parent->child3 = leftChild;
+	parent->child4->parent = parent;
+	parent->child3->parent = parent;
+	cout << "pushed mid to parent data3" << endl;
+      }
+      else {
+	cout << "parent data3 = " << parent->data3->word << endl;
+	parent->data4 = mid;
+	// parent->child5 = new Node;
+	parent->child5 = rightChild;
+	parent->child4 = leftChild;
+	parent->child5->parent = parent;
+	parent->child4->parent = parent;
+	cout << "pushed mid to parent data4" << endl;
+      }
+    }
+    
   }
   else {
     // If the node is a leaf, insert the value into the node
     if (isLeaf(node)) {
       cout << "node is a leaf" << endl;
       insertIntoLeaf(node, word);
+      return;
+    }
+
+    // Otherwise, find the child whose interval contains the value to be inserted
+    // Recursively call insert on that child
+    if (node->data1 != NULL && word < node->data1->word) {
+      cout << "descend into child1" << endl;
+      insert(node->child1, word);
+    }
+    else if (word > node->data1->word && (node->data2 == NULL || word < node->data2->word)) {
+      cout << "descend into child2" << endl;
+      insert(node->child2, word);
+    }
+    else if (word > node->data2->word && (node->data3 == NULL || word < node->data3->word)) {
+      cout << "descend into child3" << endl;
+      insert(node->child3, word);
+    }
+    else if (word > node->data3->word && (node->data4 == NULL || word < node->data4->word)) {
+      cout << "descend into child4" << endl;
+      insert(node->child4, word);
+    }
+    else {
+      cout << "descend into child5" << endl;
+      insert(node->child5, word);
     }
   }
 }
@@ -218,7 +366,6 @@ bool Tree25::isLeaf(Node* node) {
 }
 
 void Tree25::insertIntoLeaf(Node*& node, string word) {
-  cout << "insert into leaf" << endl;
   Word* newWord = new Word;
   newWord->word = word;
   newWord->count = 1;
@@ -246,6 +393,13 @@ void Tree25::insertIntoLeaf(Node*& node, string word) {
   }
 }
 
+bool Tree25::isRoot(Node* node) {
+  if (node->parent == NULL)
+    return true;
+
+  return false;
+}
+
 void Tree25::printInorder() {
   printInorder(root);
 }
@@ -255,15 +409,15 @@ void Tree25::printInorder(Node* node) {
     return;
 
   printInorder(node->child1);
-  cout << "data1: " << node->data1->word << " " << node->data1->count << endl;
+  cout << "data1: " << node->data1->word << "(" << node->data1->count << ")" << endl;
   printInorder(node->child2);
   if (node->data2 != NULL)
-    cout << "data2: " << node->data2->word << " " << node->data2->count << endl;
+    cout << "data2: " << node->data2->word << "(" << node->data2->count << ")" << endl;
   printInorder(node->child3);
   if (node->data3 != NULL)
-    cout << "data3: " << node->data3->word << " " <<  node->data3->count << endl;
+    cout << "data3: " << node->data3->word << "(" << node->data3->count << ")" << endl;
   printInorder(node->child4);
   if (node->data4 != NULL)
-    cout << "data4: " << node->data4->word << " " << node->data4->count << endl;
+    cout << "data4: " << node->data4->word << "(" << node->data4->count << ")" << endl;
   printInorder(node->child5);
 }

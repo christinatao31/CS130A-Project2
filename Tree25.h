@@ -12,6 +12,7 @@ struct Word {
 };
 
 struct Node {
+
   Word *data1, *data2, *data3, *data4;
   Node *child1, *child2, *child3, *child4, *child5, *parent;
 
